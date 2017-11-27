@@ -217,6 +217,11 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201711272041547_w1.cs" />
+    <Compile Include="Migrations\201711272041547_w1.Designer.cs">
+      <DependentUpon>201711272041547_w1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Answer.cs" />
     <Compile Include="Models\BannedWordsDictionary.cs" />
@@ -234,6 +239,10 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\SBDforumDB.mdf" />
+    <Content Include="App_Data\SBDforumDB_log.ldf">
+      <DependentUpon>SBDforumDB.mdf</DependentUpon>
+    </Content>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\PagedList.css" />
@@ -312,7 +321,6 @@
     <Content Include="Views\Shared\_MyMainLayout.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
     <Folder Include="Views\Answers\" />
     <Folder Include="Views\BannedWordsDictionaries\" />
     <Folder Include="Views\Categories\" />
@@ -330,6 +338,11 @@
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201711272041547_w1.resx">
+      <DependentUpon>201711272041547_w1.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
