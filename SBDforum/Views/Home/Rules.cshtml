@@ -1,0 +1,40 @@
+﻿@model IEnumerable<SBDforum.Models.Rule>
+@{
+    ViewBag.Title = "Rules";
+
+}
+
+
+<h2>Regulamin</h2>
+
+<div class="main_panel">
+
+    <p>
+        <table class="table table-hover">
+            <tr>
+                <th>
+                    Nazwa:
+                </th>
+                <th>
+                    Treść
+                </th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Text)
+                    </td>
+                </tr>
+            }
+
+        </table>
+    </p>
+</div>
+
+
+

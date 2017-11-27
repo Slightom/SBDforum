@@ -1,0 +1,57 @@
+﻿@model IEnumerable<SBDforum.Models.Answer>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Thread.Title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.User.Nick)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Points)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Text)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Thread.Title)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.User.Nick)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Date)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Points)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Text)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.AnswerID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.AnswerID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.AnswerID })
+        </td>
+    </tr>
+}
+
+</table>

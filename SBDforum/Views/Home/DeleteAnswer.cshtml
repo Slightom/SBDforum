@@ -1,0 +1,62 @@
+﻿@model SBDforum.Models.Answer
+
+@{
+    ViewBag.Title = "DeleteAnswer";
+}
+
+
+<h3>Jesteś pewien, że chcesz usunąć swoją odpowiedź?</h3>
+<div>
+
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Tytuł wątku:
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Thread.Title)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.User.Nick)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.User.Nick)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Points)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Points)
+        </dd>
+
+        <dt>
+            Twoja odpowiedź:
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Text)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="mySubmitButton" /> 
+        </div>
+    }
+</div>

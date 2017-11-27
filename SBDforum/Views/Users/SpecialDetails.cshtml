@@ -1,0 +1,83 @@
+﻿@model SBDforum.Models.User
+
+@{
+    ViewBag.Title = "SpecialDetails";
+}
+
+
+<script type="text/javascript">
+    function nieaktywny() {
+        alert("Użytkownik do którego chcesz wysłać wiadomość jest nieaktywny!");
+    }
+
+    function niezalogowany() {
+       alert("Aby wysłać wiadomość musisz być zalogowany!");
+    }
+</script>
+
+
+
+
+<h2>Profil użytkownika</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Nick)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nick)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Avatar)
+        </dt>
+
+        <dd>
+            <img src=@Model.Avatar.ToString() style="height:170px" />
+        </dd>
+
+        <dt>
+            Points
+        </dt>
+
+        <dd>
+            @ViewBag.Points
+        </dd>
+
+        <dt>
+             
+        </dt>
+
+        <dd>
+            @if (!Model.Active)
+            {
+                <input id="wyslijButton" type="button" value="Wyślij Wiadomość prywatną" class="btn btn-success" onclick=nieaktywny() />
+            }
+            else
+            {
+                if (Session["UserID"] != null)
+                {
+                    <input id="wyslijButton" type="button" value="Wyślij Wiadomość prywatną" class="btn btn-success" onclick="location.href='@Url.Action("SpecialCreate", "Messages",new { idR = Model.UserID })'" />
+                }
+                else
+                {
+                    <input id="wyslijButton" type="button" value="Wyślij Wiadomość prywatną" class="btn btn-success" onclick="niezalogowany()" />
+                }
+            }
+        </dd>
+
+    </dl>
+</div>
+

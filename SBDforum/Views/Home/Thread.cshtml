@@ -1,0 +1,239 @@
+﻿@model SBDforum.Models.Thread
+@{
+}
+
+   
+
+
+<script type="text/javascript">
+
+    function sortowanieData() {
+        document.getElementById("sortowanie").innerHTML = "Daty<span class=\"caret\"></span>";
+
+
+        //$(function () {
+        //    $.post('/Home/SetVariable',
+        //           { key: "SortowanieOdpowiedzi", value: 'Data' });
+        //});
+
+
+        $(document).ready(function () {
+            {
+                $("#answersbyPoints").hide();
+            };
+        });
+        $(document).ready(function () {
+            {
+                $("#answersbyDate").show();
+            };
+        });
+
+    }
+
+    function sortowaniePunkty() {
+        document.getElementById("sortowanie").innerHTML = "Punktów<span class=\"caret\"></span>";
+
+        //$(function () {
+        //    $.post('/Home/SetVariable',
+        //           { key: "SortowanieOdpowiedzi", value: 'Punkty' });
+        //});
+
+
+        $(document).ready(function () {
+            {
+                $("#answersbyDate").hide();
+            };
+        });
+
+        $(document).ready(function () {
+            {
+                $("#answersbyPoints").show();
+            };
+        });
+    }
+
+    $(document).ready(function () {
+        $(".d1").click(function () {
+            $(this).next(".d2").slideToggle("slow");
+        });
+    });
+
+    function vote(x)
+    {
+        var name = x.name;
+
+        $.post("/Home/SessionAttributeExists", { x: 'UserID' }, function (zalogowany) {
+            if (zalogowany == "false") {
+                alert("Aby oddać głos musisz być zalogowany!");
+            }
+            else {
+                if (name[4] == 'P') {
+                    $.post("/Home/VoteAdd", { vname: name }, function (opcja) {
+                        if (opcja == "P") {
+                            alert("Już głosowałeś na tę odpowiedź!");
+                        }
+                        else{
+                            var nowe = $(x).parent().children("#a").html() - (-1);
+                            $(x).parent().children("#a").html(nowe);
+                        }
+
+                    });
+                }
+                else {
+                    $.post("/Home/VoteSub", { vname: name }, function (opcja) {
+                        if (opcja == "M") {
+                            alert("Już głosowałeś na tę odpowiedź!");
+                        }
+                        else{
+                            var nowe = $(x).parent().children("#a").html() -1;
+                            $(x).parent().children("#a").html(nowe);
+                        }
+
+                    });
+                }
+
+            }
+        });
+      
+    }
+
+    function showCommentBoxf(obiekt) {
+
+        $.post("/Home/SessionAttributeExists", { x: 'UserID' }, function (zalogowany) {
+            if (zalogowany == "false") {
+                alert("Aby dodać komentarz musisz być zalogowany!");
+            }
+            else {
+                $(document).ready(function () {
+                    $(obiekt).next(".showCommentBox").slideToggle("slow");
+                });
+            }
+
+        });
+
+    }
+
+    function showAnswerBoxf(obiekt) {
+
+        $.post("/Home/SessionAttributeExists", { x: 'UserID' }, function (zalogowany) {
+            if (zalogowany == "false") {
+                alert("Aby dodać odpowiedź musisz być zalogowany!");
+            }
+            else {
+                $(document).ready(function () {
+                    $(obiekt).next(".showAnswerBox").slideToggle("slow");
+                });
+            }
+
+        });
+
+    }
+
+</script>
+
+
+<div class="row">
+
+    <div class="col-sm-12 col-md-12 col-lg-12">
+
+        <div style="margin-top: 20px;" class="post_panel">
+            <div class="post-heading">
+
+                <div class="media">
+                    <div class="media-left media-middle">
+                        <img src=@Model.User.Avatar.ToString() class="media-object" style="height:70px">
+                    </div>
+                    <div class="media-body">
+                        <br />
+                        @if ((Session["UserID"] != null) && (Model.UserID.ToString() == Session["UserID"].ToString()))
+                        {
+                            <p style="font-weight:bold">
+                                Utworzyłeś wątek  <span class="extraText">@Model.Date</span> &nbsp&nbsp&nbsp
+
+
+                                <input type="button" value="Edytuj" class="btn btn-warning" onclick="location.href='@Url.Action("SpecialEdit", "Threads", new { id = Model.ThreadID })'" />
+                                <input type="button" value="Usuń" class="btn btn-danger" onclick="location.href='@Url.Action("DeleteThread", new { id = Model.ThreadID })'" />
+                            </p>
+                        }
+                        else
+                        {
+                            <p style="font-weight:bold">
+                                Użytkownik <span class="extraText">
+                                    <a href="@Url.Action("SpecialDetails", "Users",new { id=Model.UserID, idT = Model.ThreadID})" class="userDetailsLink">
+                                        @Model.User.Nick
+                                    </a>
+
+                                </span> &nbsp&nbsp&nbsp
+                                utworzył wątek <span class="extraText">@Model.Date</span>
+                            </p>
+                        }
+              
+                    </div>
+                </div>
+
+            </div>
+            <div class="post-body">
+                <h2>Temat: @Model.Title</h2>
+                <br /> <br /> <br />
+            </div>
+            <div class="post_footer">
+                    <span>
+                        @Model.Answers.Count()
+                        @if (Model.Answers.Count() == 1)
+                        { <span>odpowiedź. </span> }
+                        else
+                        { <span>odpowiedzi. </span> }
+                        Sortowanie wg:
+                    </span>
+
+                    <div class="btn-group">
+                        <button id="sortowanie" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                            Punktów<span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a onclick="sortowanieData()" href="#">Daty</a></li>
+                            <li><a onClick="sortowaniePunkty()" href="#">Punktów</a></li>
+                        </ul>
+                    </div>
+            </div>
+        </div>
+
+
+        <div id="answersbyPoints">
+            @Html.Action("OrderedAnswersByPoints", Model.ThreadID)
+        </div>
+
+        <div id="answersbyDate" style="display: none;">
+            @Html.Action("OrderedAnswersByDate", Model.ThreadID)
+        </div>
+
+
+
+
+        <button style="margin-left: 50px; margin-top: 5px; text-align: left;" type="button" class="btn-primary" onclick="showAnswerBoxf(this)">
+            Odpowiedz
+        </button>
+
+
+        <div class="showAnswerBox" style="display:none">
+            <div class="add_answer_panel">
+                <div id="AnswerBody" class="panel-body">
+                    @using (Html.BeginForm("AddAnswer", "Home", FormMethod.Post))
+                    {
+                        <textarea name="tID" style="display:none">@Model.ThreadID</textarea>
+                        <textarea name="answer" class="textareaComment" placeholder="Napisz odpowiedź..." onfocus="this.placeholder=''"></textarea>
+
+                        <div><input type="submit" value="Zapisz" class="mySubmitButton" /></div>
+                    }
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+    </div>
+</div>
+
+

@@ -1,0 +1,54 @@
+﻿@model SBDforum.Models.Thread
+
+@{
+    ViewBag.Title = "DeleteThread";
+}
+
+
+<h3>Czy jesteś pewien, że chcesz usunąć swój wątek?</h3>
+<div>
+
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Nazwa kategorii
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Category.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.User.Nick)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.User.Nick)
+        </dd>
+
+        <dt>
+            Twój wątek
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="mySubmitButton" />
+        </div>
+    }
+</div>

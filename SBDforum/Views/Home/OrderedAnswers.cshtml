@@ -1,0 +1,145 @@
+﻿@model IEnumerable<SBDforum.Models.Answer>
+
+
+
+
+@foreach (var item in Model)
+{
+    <div style="margin-top: 40px; margin-left: 50px; margin-bottom:0px" class="answer_panel">
+        <div class="panel-heading">
+
+            <div class="media">
+                <div class="media-left media-middle">
+                    <img src=@item.User.Avatar.ToString() class="media-object" style="height:70px">
+                </div>
+                <div class="media-body">
+                    <br />
+                    @{
+                        string votePlus = "voteP" + item.AnswerID.ToString();
+                        string voteMinus = "voteM" + item.AnswerID.ToString();
+                        string voteA = "voteA" + item.AnswerID.ToString();
+                    }
+
+                    @if ((Session["UserID"] != null) && (item.UserID.ToString() == Session["UserID"].ToString()))
+                    {
+                        <p style="font-weight:bold">
+                            Odpowiedziałeś  <span class="extraText">@item.Date</span> &nbsp&nbsp&nbsp
+                            Punkty: <span id="a" class="extraText">@item.Points</span>
+
+                            <input id=@votePlus name=@votePlus type="button" onClick="vote(this)" value="+" class="buttonPlus" title="">
+                            <input id=@voteMinus name=@voteMinus type="button" onClick="vote(this)" value="–" class="buttonMinus" title="">
+
+                            &nbsp&nbsp&nbsp
+
+                            <input type="button" value="Edytuj" class="btn btn-warning" onclick="location.href='@Url.Action("SpecialEdit", "Answers", new { id = item.AnswerID })'" />
+                            <input type="button" value="Usuń" class="btn btn-danger" onclick="location.href='@Url.Action("DeleteAnswer", new { id = item.AnswerID })'" />
+                        </p>
+                    }
+                    else
+                    {
+                        <p style="font-weight:bold">
+                            Użytkownik <span class="extraText">
+                                <a href="@Url.Action("SpecialDetails", "Users",new { id=item.UserID, idT = item.ThreadID })" class="userDetailsLink">
+                                    @item.User.Nick
+                                </a>
+
+                            </span> &nbsp&nbsp&nbsp
+                            Skomentował <span class="extraText">@item.Date</span> &nbsp&nbsp&nbsp
+                            Punkty: <span id="a" class="extraText">@item.Points</span>
+
+                            <input id=@votePlus name=@votePlus type="button" onClick="vote(this)" value="+" class="buttonPlus" title="">
+                            <input id=@voteMinus name=@voteMinus type="button" onClick="vote(this)" value="–" class="buttonMinus" title="">
+                        </p>
+                    }
+
+                </div>
+            </div>
+
+
+
+        </div>
+        <div class="panel-body">
+            @item.Text
+        </div>
+    </div>
+
+    <div style="margin-top: 0px">
+
+
+        <div class="d1">
+            Komentarze(@item.Comments.Count())
+        </div>
+
+
+        <div class="d2" style="display:none;">
+            @{
+                SBDforum.Models.MyDbContext db = new SBDforum.Models.MyDbContext();
+                var comments = db.Comments.Where(p => p.AnswerID == item.AnswerID).Select(n => n).OrderBy(p => p.Date).ToList();
+            }
+            @foreach (var c in comments)
+            {
+                <div class="comment_panel">
+                    <div class="panel-heading">
+
+                        <div class="media">
+                            <div class="media-left media-middle">
+                                <img src=@c.User.Avatar.ToString() class="media-object" style="height:70px">
+                            </div>
+                            <div class="media-body">
+                                <br />
+                                @if ((Session["UserID"] != null) && (c.UserID.ToString() == Session["UserID"].ToString()))
+                                {
+                                    <p style="font-weight:bold">
+                                        Dodałeś komentarz  <span class="extraText">@c.Date</span> &nbsp&nbsp&nbsp
+                                        <input type="button" value="Edytuj" class="btn btn-warning" onclick="location.href='@Url.Action("SpecialEdit", "Comments", new { id = c.CommentID, t = item.ThreadID })'" />
+                                        <input type="button" value="Usuń" class="btn btn-danger" onclick="location.href='@Url.Action("DeleteComment", new { id = c.CommentID })'" />
+                                    </p>
+                                }
+                                else
+                                {
+                                    <p style="font-weight:bold">
+                                        Użytkownik
+                                        <span class="extraText">
+                                            <a href="@Url.Action("SpecialDetails", "Users",new { id=c.UserID, idT = c.Answer.ThreadID })" class="userDetailsLink">
+                                                @c.User.Nick
+                                            </a>
+
+                                        </span> &nbsp&nbsp&nbsp
+                                        Skomentował <span class="extraText">@c.Date</span> &nbsp&nbsp&nbsp
+                                    </p>
+                                }
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="panel-body">
+                        @c.Text
+                    </div>
+                </div>
+            }
+
+
+
+            <button style="margin-left: 155px; margin-top: 5px; text-align: left;" type="button" class="btn-primary" onclick="showCommentBoxf(this)">
+                Skomentuj
+            </button>
+
+
+            <div class="showCommentBox" style="display:none">
+                <div id="commentBody" class="add_comment_panel">
+                    @using (Html.BeginForm("AddComment", "Home", FormMethod.Post))
+                    {
+                        <textarea name="aID" style="display:none">@item.AnswerID</textarea>
+                        <textarea name="comment" class="textareaComment" placeholder="Napisz komentarz..." onfocus="this.placeholder=''"></textarea>
+
+                        <input type="submit" value="Zapisz" class="mySubmitButton" />
+
+                    }
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+                }

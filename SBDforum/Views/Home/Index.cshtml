@@ -1,0 +1,190 @@
+﻿@using PagedList.Mvc;
+@using PagedList;
+
+@model IPagedList<SBDforum.Models.Thread>
+@{
+    ViewBag.Title = "Home Page";
+
+}
+
+
+
+
+<div class="row" style="margin-bottom:18px;"> </div>
+
+<div class="row">
+
+    <div class="col-sm-12 col-md-12 col-lg-8">
+        <div class="main_panel">
+            @if (ViewBag.searchString != null)
+            {
+                <h2>Wyniki wyszukiwania dla: @ViewBag.searchString</h2>
+            }
+            else
+            {
+                if (ViewBag.searchCategory != null)
+                {
+                    <h2>Posty z kategorii: @ViewBag.searchCategory</h2>
+                }
+                else
+                {
+                    <h2>Najnowsze posty</h2>
+                }
+
+            }
+            <p>
+                <table class="table table-hover" style="text-align:center;">
+                    <tr>
+                        <th style="text-align:center">
+                            Kategoria
+                        </th>
+                        <th style="text-align:center">
+                            Zadane przez:
+                        </th>
+                        <th style="text-align:center">
+                            Tytuł
+                        </th>
+                        <th style="text-align:center">
+                            Dodane:
+                        </th>
+                    </tr>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <br/>
+                                @Html.DisplayFor(modelItem => item.Category.Name)
+                            </td>
+                            <td>
+                                <img src="@item.User.Avatar" style="height:70px" />
+                                <br />
+                                @Html.DisplayFor(modelItem => item.User.Nick)
+                            </td>
+                            <td style="text-decoration:none; color: #ffffff">
+                                <br />
+                                @Html.ActionLink(Html.DisplayFor(modelItem => item.Title).ToString(), "Thread", new { id = item.ThreadID }, new { @class = "linkInTable" })
+                            </td>
+                            <td>
+                                <br />
+                                @Html.DisplayFor(modelItem => item.Date)
+                            </td>
+                        </tr>
+                    }
+
+                </table>
+            </p>
+        </div>
+    </div>
+
+
+
+    <div class="col-sm-12 col-md-12 col-lg-4">
+
+        <div id="zegar" style="font-size: 40px;text-align: center;">
+        </div>
+
+        @section scripts{
+
+            @*<script type="text/javascript">
+
+                function odliczanie() {
+                    var dzisiaj = new Date();
+
+
+                    var godzina = dzisiaj.getHours();
+                    if (godzina < 10) godzina = "0" + godzina;
+
+                    var minuta = dzisiaj.getMinutes();
+                    if (minuta < 10) minuta = "0" + minuta;
+
+                    var sekunda = dzisiaj.getSeconds();
+                    if (sekunda < 10) sekunda = "0" + sekunda;
+
+                    document.getElementById("zegar").innerHTML = godzina + ":" + minuta + ":" + sekunda;
+
+                    setTimeout("odliczanie()", 1000);
+                }
+
+                function podmienWyswietlanePosty() {
+                    document.getElementById("wyswietlanePosty").innerHTML = document.getElementById("SearchString").valueOf;
+                }
+
+                function newMs() {
+                    //alert("newMS");
+                    $.post("/Home/howManyNms", function (ile) {
+                        if (ile != -1) {
+                            if (ile == 0) {
+                                document.getElementById("sumOfNewMessages").style.color = "gray";
+                            }
+                            else {
+                                document.getElementById("sumOfNewMessages").style.color = "red";
+                            }
+                            document.getElementById("sumOfNewMessages").innerHTML = "(" + ile + ")";
+                        }
+                    });
+
+                    setTimeout("newMs()", 3000);
+                }
+
+            </script>*@
+        }
+
+            <div class="main_panel">
+                
+                @using (Html.BeginForm("Index", "Home", FormMethod.Get))
+                {
+                    
+                       <span>Wyszukaj: </span>
+                       <span style="color: black;">@Html.TextBox("SearchString")</span>
+                       <input type="submit" value="Szukaj" class="mySubmitButton">
+                   
+                }
+            </div>
+
+
+            <div class="top_panel">
+                <h2>Top 3 użytkowników</h2>
+                <p>
+                    <table class="table table-hover">
+                        <tr>
+                            <th>
+                                Nick
+                            </th>
+                            <th>
+                                Punkty
+                            </th>
+                            <th>
+                                Stopień
+                            </th>
+                        </tr>
+
+                        @foreach (var item in ViewBag.top3)
+                        {
+                            <tr>
+                                <td>
+                                    @item.Nick
+                                </td>
+                                <td>
+                                    @item.Points
+                                </td>
+                                <td>
+                                    @item.Level
+                                </td>
+                            </tr>
+                        }
+
+                    </table>
+                </p>
+            </div>
+
+
+    </div>
+
+</div>
+
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page, searchString = Request.QueryString["searchString"] }),
+
+    new PagedListRenderOptions() { Display = PagedListDisplayMode.IfNeeded }
+
+)

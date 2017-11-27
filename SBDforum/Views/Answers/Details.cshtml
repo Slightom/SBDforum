@@ -1,0 +1,58 @@
+﻿@model SBDforum.Models.Answer
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Answer</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Thread.Title)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Thread.Title)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.User.Nick)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.User.Nick)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Points)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Points)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Text)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Text)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.AnswerID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

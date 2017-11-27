@@ -1,0 +1,190 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FORUM Informatyczne</title>
+
+    <link rel="Stylesheet" type="text/css" href="~/Content/Site.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans|Lato" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+
+
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    <script type="text/javascript">
+
+        function odliczanie() {
+            var dzisiaj = new Date();
+
+
+            var godzina = dzisiaj.getHours();
+            if (godzina < 10) godzina = "0" + godzina;
+
+            var minuta = dzisiaj.getMinutes();
+            if (minuta < 10) minuta = "0" + minuta;
+
+            var sekunda = dzisiaj.getSeconds();
+            if (sekunda < 10) sekunda = "0" + sekunda;
+
+            document.getElementById("zegar").innerHTML = godzina + ":" + minuta + ":" + sekunda;
+
+            setTimeout("odliczanie()", 1000);
+        }
+
+        function podmienWyswietlanePosty() {
+            document.getElementById("wyswietlanePosty").innerHTML = document.getElementById("SearchString").valueOf;
+        }
+
+
+        function newMs() {
+            //alert("newMS");
+            $.post("/Home/howManyNms", function (ile) {
+                if (ile != -1) {
+                    if (ile == 0) {
+                        document.getElementById("sumOfNewMessages").style.color = "gray";
+                    }
+                    else {
+                        document.getElementById("sumOfNewMessages").style.color = "red";
+                    }
+
+                    //var old = document.getElementById("sumOfNewMessages").innerHTML;
+                    //alert(old);
+
+                    document.getElementById("sumOfNewMessages").innerHTML = "(" + ile + ")";
+                }
+            });
+
+            setTimeout("newMs()", 3000);
+        }
+
+    </script>
+
+
+</head>
+
+
+
+<body onload="newMs(); odliczanie();">
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+
+                <span class="navbar-brand" style="color: #ff0000">ForumInf</span>
+
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Strona Główna", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Kategorie", "Categories", "Home")</li>
+                    <li>@Html.ActionLink("Regulamin", "Rules", "Home")</li>
+                    @if (Session["UserID"] != null)
+                    {
+                        if (Session["admin"] != null)
+                        {
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Tabele <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="@Url.Action("Index", "Categories")">Kategorie</a></li>
+                                    <li><a href="@Url.Action("Index", "Threads")">Wątki</a></li>
+                                    <li><a href="@Url.Action("Index", "Answers")">Odpowiedzi</a></li>
+                                    <li><a href="@Url.Action("Index", "Comments")">Komentarze</a></li>
+                                    <li><a href="@Url.Action("Index", "Users")">Użytkownicy</a></li>
+                                    <li><a href="@Url.Action("Index", "Messages")">Wiadomości</a></li>
+                                    <li><a href="@Url.Action("Index", "Rules")">Regulamin</a></li>
+                                    <li><a href="@Url.Action("Index", "IntervalPoints")">PrzedziałyPunktowe</a></li>
+                                    <li><a href="@Url.Action("Index", "BannedWordsDictionaries")">SłownikSłówZakazanych</a></li>
+                                </ul>
+                            </li>
+                        }
+                        else
+                        {
+                            <li>@Html.ActionLink("Dodaj Wątek", "SpecialCreate", "Threads")</li>
+                        }
+
+
+                    }
+
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    @if (Session["UserID"] == null)
+                    {
+                        <li>@Html.ActionLink("Zaloguj", "Login", "Account")</li>
+                        <li>@Html.ActionLink("Zarejestruj", "Create", "Users")</li>
+                    }
+                    else
+                    {
+                        int id = SBDforum.Controllers.HomeController.howManyNms2(Session["UserID"].ToString());
+                        <li id="newMessages">
+
+
+                            <a href="@Url.Action("MyMessages", "Home")">
+                                <span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>
+                                @if(id == 0)
+                                {
+                                    <span id="sumOfNewMessages" style="color:gray">(0)</span>
+                                }
+                                else
+                                {
+                                    <span id="sumOfNewMessages" style="color:red">(@id)</span>
+                                }
+                            </a>
+                        </li>
+                        <li>@Html.ActionLink("Witaj " + @Session["UserName"], "Index", "Home")</li>
+                        <li>@Html.ActionLink("Moje konto", "MyConto", "Home")</li>
+                        <li>@Html.ActionLink("Wyloguj", "LogOut", "Account")</li>
+
+
+                    }
+
+
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="container body-content">
+
+
+
+
+
+
+
+
+
+        @RenderBody()
+        <hr />
+        <footer style="text-align:center">
+            <p>
+                &copy; @DateTime.Now.Year - Forum
+                <button type="button" class="btn btn-default btn-sm" onclick="location.href='@Url.Action("Login", "Account")'">
+                    <span class="glyphicon glyphicon-cog"></span>
+                </button>
+            </p>
+
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+
+
+</body>
+</html>

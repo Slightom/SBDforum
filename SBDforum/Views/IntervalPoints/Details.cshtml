@@ -1,0 +1,42 @@
+﻿@model SBDforum.Models.IntervalPoint
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>IntervalPoint</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.LowerRange)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LowerRange)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UpperRange)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UpperRange)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.IntervalPointID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

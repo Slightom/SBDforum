@@ -1,0 +1,23 @@
+﻿@model IEnumerable<SBDforum.Models.Category>
+
+
+<h2>Kategorie</h2>
+<hr />
+                
+
+@foreach (var c in Model)
+{
+    <div class="col-sm-4">
+        <a href="@Url.Action("Index", "Home", new { CID=c.CategoryID })" class="squarelink">
+            <div class="square">
+                <br /><br />
+                <p style="font-weight:bold; font-size:x-large; font-family: 'Josefin Sans', sans-serif;">
+                    @c.Name (@c.Threads.Count())
+                </p>
+                <br />
+                <p style="font-style:italic; font-size:large; font-family: 'Josefin Sans', sans-serif;"> @c.Description</p>
+            </div>
+        </a>      
+    </div>
+}
+

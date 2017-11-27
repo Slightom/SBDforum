@@ -1,0 +1,86 @@
+﻿@model SBDforum.Models.User
+
+@{
+    ViewBag.Title = "SpecialDetails";
+}
+
+
+<script type="text/javascript">
+    function nieaktywny() {
+        alert("Użytkownik do którego chcesz wysłać wiadomość jest nieaktywny!");
+    }
+
+    function niezalogowany() {
+       alert("Aby wysłać wiadomość musisz być zalogowany!");
+    }
+</script>
+
+
+
+
+<h2>Moje Konto</h2>
+
+<div>
+    <h4>User</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Nick)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nick)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Avatar)
+        </dt>
+
+        <dd>
+            <img src="@Model.Avatar" style="height:170px" />
+        </dd>
+
+        <dt>
+            Moje punkty
+        </dt>
+
+        <dd>
+            @ViewBag.Points
+        </dd>
+
+        <dt>
+            
+        </dt>
+
+        <dd>
+            @*@Html.ActionLink("Edytuj Profil", "EditCount", new { id = Model.UserID })*@
+            <input type="button" class="mySubmitButton" value="Edytuj Profil" onclick="location.href='@Url.Action("EditCount", new { id = Model.UserID })'" />
+            <span> </span>
+            <input type="button" class="mySubmitButton" value="Moje wiadomości" onclick="location.href='@Url.Action("MyMessages", new { id = Model.UserID })'" />
+         </dd>
+
+        <dt>
+
+        </dt>
+
+        <dd>
+            @*@Html.ActionLink("Moje wiadomości", "MyMessages", new { id = Model.UserID })*@
+            
+        </dd>
+
+
+
+
+
+    </dl>
+</div>
+
